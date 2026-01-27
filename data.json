@@ -1,0 +1,14 @@
+{
+  "brandName": "below zero",
+  "announcement": "FREE GLOBAL SHIPPING ON ALL ORDERS",
+  "whatsapp": "923000000000",
+  "products": [
+    {
+      "title": "Lady Bags",
+      "price": "1500",
+      "image": "https://images.unsplash.com/photo-1584917865442-de89df76afd3",
+      "saleTag": "20% OFF",
+      "status": "In Stock"
+    }
+  ]
+}
