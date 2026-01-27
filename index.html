@@ -3,95 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Below Zero | Haute Couture</title>
+    <title>Below Zero | Luxury Boutique</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #1a1a1a; }
         .luxury-font { font-family: 'Playfair Display', serif; }
-        .hero-gradient { background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.4)); }
-        .cart-sidebar { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(100%); }
+        .cart-sidebar { transition: transform 0.4s ease; transform: translateX(100%); }
         .cart-open .cart-sidebar { transform: translateX(0); }
+        /* Brown Footer Styling */
+        .footer-brown { background-color: #3d2b1f; color: #f5f5f5; }
     </style>
 </head>
 <body class="relative">
 
-    <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-stone-100 py-5 px-10 flex justify-between items-center">
-        <div class="hidden md:flex space-x-8 text-[10px] uppercase tracking-widest font-semibold">
-            <a href="#" class="hover:text-stone-400 transition">Collection</a>
-            <a href="#" class="hover:text-stone-400 transition">Maison</a>
-        </div>
-        <h1 class="luxury-font text-2xl md:text-3xl tracking-[0.4em] uppercase font-bold cursor-pointer" onclick="window.location.reload()">BELOW ZERO</h1>
-        <div class="flex items-center space-x-6">
-            <button onclick="toggleCart()" class="relative group">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                <span id="cart-count" class="absolute -top-2 -right-2 bg-black text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center group-hover:bg-stone-600 transition">0</span>
-            </button>
-        </div>
+    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 border-b border-stone-100 py-6 px-10 flex justify-between items-center">
+        <div class="w-10"></div> <h1 class="luxury-font text-3xl tracking-[0.4em] uppercase font-bold cursor-pointer" onclick="window.location.reload()">BELOW ZERO</h1>
+        <button onclick="toggleCart()" class="relative">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span id="cart-count" class="absolute -top-2 -right-2 bg-black text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
+        </button>
     </nav>
 
-    <section class="relative h-[85vh] w-full overflow-hidden mt-16">
-        <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=2000" class="w-full h-full object-cover object-center" alt="Luxury Banner">
-        <div class="absolute inset-0 hero-gradient flex items-center justify-start px-10 md:px-24">
-            <div class="text-white max-w-xl">
-                <span class="uppercase tracking-[0.5em] text-[10px] mb-4 block">New Season 2024</span>
-                <h2 class="luxury-font text-5xl md:text-7xl mb-6">LUXURY ZERO</h2>
-                <p class="text-sm md:text-base text-stone-200 mb-8 font-light leading-relaxed tracking-wide">
-                    Experience the pinnacle of artisanal craftsmanship. Our latest collection defines elegance for the modern woman.
-                </p>
-                <button class="bg-white text-black px-10 py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-stone-200 transition">Discover Now</button>
+    <section class="relative h-[80vh] w-full mt-20">
+        <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=2000" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+            <div class="text-center text-white">
+                <h2 class="luxury-font text-6xl mb-4">THE WINTER COLLECTION</h2>
+                <p class="uppercase tracking-widest text-sm">Timeless Elegance</p>
             </div>
         </div>
     </section>
 
-    <div class="max-w-7xl mx-auto px-6 pt-24 pb-12">
-        <h2 class="luxury-font text-3xl tracking-widest uppercase border-b border-stone-100 pb-6">The Selection</h2>
-    </div>
-
-    <main class="max-w-7xl mx-auto px-6 pb-32">
-        <div id="product-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 md:gap-8">
-            </div>
+    <main class="max-w-7xl mx-auto px-6 py-20">
+        <div id="product-grid" class="grid grid-cols-2 md:grid-cols-4 gap-8"></div>
     </main>
 
-    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/30 z-[60] hidden backdrop-blur-sm"></div>
-    <div id="cart-sidebar" class="fixed top-0 right-0 w-full md:w-[450px] h-full bg-white z-[70] cart-sidebar shadow-2xl p-10 flex flex-col">
-        <div class="flex justify-between items-center mb-10">
-            <h2 class="luxury-font text-2xl uppercase tracking-widest">My Bag</h2>
-            <button onclick="toggleCart()" class="text-3xl font-light">&times;</button>
+    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/40 z-[60] hidden"></div>
+    <div id="cart-sidebar" class="fixed top-0 right-0 w-full md:w-[400px] h-full bg-white z-[70] cart-sidebar shadow-2xl p-8 flex flex-col">
+        <div class="flex justify-between items-center mb-8 border-b pb-4">
+            <h2 class="luxury-font text-xl uppercase tracking-widest">My Selection</h2>
+            <button onclick="toggleCart()" class="text-2xl">&times;</button>
         </div>
-        <div id="cart-items" class="flex-1 overflow-y-auto space-y-8">
-            <p class="text-stone-400 italic">No items selected.</p>
-        </div>
-        <div class="border-t border-stone-100 pt-8 mt-8">
-            <div class="flex justify-between text-xl luxury-font mb-8">
-                <span class="text-stone-500">Total</span>
-                <span id="cart-total" class="font-bold">Rs. 0</span>
+        <div id="cart-items" class="flex-1 overflow-y-auto space-y-6"></div>
+        <div class="border-t pt-6">
+            <div class="flex justify-between text-xl mb-6 luxury-font">
+                <span>Total:</span>
+                <span id="cart-total">Rs. 0</span>
             </div>
-            <button onclick="checkoutWhatsApp()" class="w-full bg-black text-white py-5 uppercase tracking-[0.3em] text-[10px] font-bold hover:bg-stone-800 transition">
-                Proceed to Checkout
+            <button onclick="checkoutWhatsApp()" class="w-full bg-black text-white py-4 uppercase tracking-widest text-xs font-bold hover:bg-stone-800 transition">
+                Checkout via WhatsApp
             </button>
         </div>
     </div>
 
-    <footer class="bg-stone-50 border-t border-stone-100 pt-24 pb-12">
+    <footer class="footer-brown pt-20 pb-10">
         <div class="max-w-7xl mx-auto px-10">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-20 mb-20 text-center md:text-left">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-16 mb-16">
                 <div>
-                    <h3 class="luxury-font text-xl tracking-widest mb-6">BELOW ZERO</h3>
-                    <p class="text-stone-400 text-xs leading-loose tracking-widest uppercase">© 2024 Below Zero Maison. <br>Crafting excellence.</p>
+                    <h2 class="luxury-font text-2xl tracking-widest mb-4">BELOW ZERO</h2>
+                    <p class="text-stone-300 text-sm opacity-80 italic">© 2024 Below Zero Maison.<br>Crafting excellence.</p>
                 </div>
                 <div>
-                    <h4 class="text-[10px] font-bold uppercase tracking-[0.3em] mb-6">Quick Links</h4>
-                    <ul class="text-stone-500 text-[10px] uppercase tracking-widest space-y-4">
-                        <li><a href="#" class="hover:text-black">Home</a></li>
-                        <li><a href="#" class="hover:text-black">Free Shipping</a></li>
-                        <li><a href="/admin/" class="hover:text-black">Store Manager</a></li>
+                    <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Quick Links</h4>
+                    <ul class="text-stone-400 text-sm space-y-3">
+                        <li><a href="#" class="hover:text-white transition">Home</a></li>
+                        <li><a href="#" class="hover:text-white transition">Free Shipping</a></li>
+                        <li><a href="/admin/" class="hover:text-white transition">Store Manager</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-[10px] font-bold uppercase tracking-[0.3em] mb-6">Support</h4>
-                    <p class="text-stone-500 text-[10px] uppercase tracking-widest leading-relaxed">
-                        Monday - Friday<br>9:00 AM - 6:00 PM<br>support@belowzero.com
+                    <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Support</h4>
+                    <p class="text-stone-400 text-sm leading-loose">
+                        Monday - Friday<br>
+                        9:00 AM - 6:00 PM<br>
+                        support@belowzero.com
                     </p>
                 </div>
             </div>
@@ -105,66 +91,66 @@
         fetch('/data.json').then(res => res.json()).then(data => {
             whatsappNum = data.whatsapp_number || "923000000000";
             const grid = document.getElementById('product-grid');
+            
             data.products.forEach((p, index) => {
+                // Undefined handle karne ke liye default name
+                const pName = p.product_title || "Luxury Leather Bag";
                 grid.innerHTML += `
                     <div class="group cursor-pointer">
-                        <div class="relative aspect-[1/1] overflow-hidden mb-4 bg-stone-50 border border-stone-100">
-                            <img src="${p.image}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                            <button onclick="addToCart('${p.product_title}', ${p.price})" class="absolute bottom-0 left-0 w-full bg-white/90 py-3 text-[9px] uppercase font-bold tracking-[0.2em] opacity-0 group-hover:opacity-100 transition-opacity">
-                                + Quick Add
+                        <div class="relative aspect-square overflow-hidden bg-stone-100 mb-4 border border-stone-100">
+                            <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                            <button onclick="addToCart('${pName}', ${p.price}, '${p.image}')" class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <span class="bg-white px-4 py-2 text-[10px] uppercase font-bold tracking-widest">+ Add to Bag</span>
                             </button>
                         </div>
-                        <div class="text-center md:text-left">
-                            <h3 class="luxury-font text-sm tracking-wide mb-1">${p.product_title}</h3>
-                            <p class="text-stone-400 text-xs italic font-serif">Rs. ${p.price}</p>
-                        </div>
+                        <h3 class="luxury-font text-sm tracking-wide">${pName}</h3>
+                        <p class="text-stone-500 text-xs">Rs. ${p.price}</p>
                     </div>`;
             });
         });
 
-        function addToCart(name, price) {
-            cart.push({ name, price });
+        function addToCart(name, price, img) {
+            cart.push({ name, price, img });
             updateCart();
             if(!document.body.classList.contains('cart-open')) toggleCart();
         }
 
         function updateCart() {
             const list = document.getElementById('cart-items');
-            const count = document.getElementById('cart-count');
             const total = document.getElementById('cart-total');
-            list.innerHTML = cart.length ? '' : '<p class="text-stone-400 italic">No items selected.</p>';
+            list.innerHTML = cart.length ? '' : '<p class="text-stone-400">Empty</p>';
             let sum = 0;
+            
             cart.forEach((item, i) => {
                 sum += item.price;
                 list.innerHTML += `
-                    <div class="flex justify-between items-start border-b border-stone-50 pb-6">
-                        <div>
-                            <h4 class="text-xs font-bold uppercase tracking-widest mb-1">${item.name}</h4>
-                            <p class="text-xs text-stone-400 italic">Rs. ${item.price}</p>
+                    <div class="flex gap-4 items-center">
+                        <img src="${item.img}" class="w-16 h-16 object-cover">
+                        <div class="flex-1">
+                            <h4 class="text-xs font-bold uppercase">${item.name}</h4>
+                            <p class="text-xs text-stone-500">Rs. ${item.price}</p>
                         </div>
-                        <button onclick="removeItem(${i})" class="text-[10px] text-stone-300 hover:text-black transition uppercase font-bold tracking-tighter">Remove</button>
+                        <button onclick="removeItem(${i})" class="text-[10px] text-red-400">X</button>
                     </div>`;
             });
-            count.innerText = cart.length;
+            document.getElementById('cart-count').innerText = cart.length;
             total.innerText = `Rs. ${sum}`;
         }
 
-        function removeItem(i) {
-            cart.splice(i, 1);
-            updateCart();
-        }
-
-        function toggleCart() {
+        function removeItem(i) { cart.splice(i, 1); updateCart(); }
+        function toggleCart() { 
             document.body.classList.toggle('cart-open');
             document.getElementById('cart-overlay').classList.toggle('hidden');
         }
 
         function checkoutWhatsApp() {
-            if(!cart.length) return alert("Please select a bag first");
-            let message = "*BELOW ZERO - NEW SELECTION*%0A%0A";
-            cart.forEach(item => message += `• ${item.name} - Rs. ${item.price}%0A`);
-            message += `%0A*TOTAL: ${document.getElementById('cart-total').innerText}*%0A%0APlease process my order.`;
-            window.location.href = `https://wa.me/${whatsappNum}?text=${message}`;
+            if(!cart.length) return;
+            let msg = "*ORDER DETAILS FROM BELOW ZERO*%0A%0A";
+            cart.forEach(item => {
+                msg += `👜 *${item.name}*%0APrice: Rs. ${item.price}%0AImage: ${item.img}%0A%0A`;
+            });
+            msg += `*TOTAL: ${document.getElementById('cart-total').innerText}*`;
+            window.location.href = `https://wa.me/${whatsappNum}?text=${msg}`;
         }
     </script>
 </body>
