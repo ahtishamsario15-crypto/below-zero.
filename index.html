@@ -11,14 +11,15 @@
         .luxury-font { font-family: 'Playfair Display', serif; }
         .cart-sidebar { transition: transform 0.4s ease; transform: translateX(100%); }
         .cart-open .cart-sidebar { transform: translateX(0); }
-        /* Brown Footer Styling */
         .footer-brown { background-color: #3d2b1f; color: #f5f5f5; }
+        .modal-blur { backdrop-filter: blur(8px); background-color: rgba(0,0,0,0.5); }
     </style>
 </head>
 <body class="relative">
 
     <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 border-b border-stone-100 py-6 px-10 flex justify-between items-center">
-        <div class="w-10"></div> <h1 class="luxury-font text-3xl tracking-[0.4em] uppercase font-bold cursor-pointer" onclick="window.location.reload()">BELOW ZERO</h1>
+        <div class="w-10"></div>
+        <h1 class="luxury-font text-3xl tracking-[0.4em] uppercase font-bold cursor-pointer" onclick="window.location.reload()">BELOW ZERO</h1>
         <button onclick="toggleCart()" class="relative">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
             <span id="cart-count" class="absolute -top-2 -right-2 bg-black text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
@@ -27,10 +28,10 @@
 
     <section class="relative h-[80vh] w-full mt-20">
         <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=2000" class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
-            <div class="text-center text-white">
+        <div class="absolute inset-0 flex items-center justify-center">
+            <div class="text-center text-white bg-black/20 p-10 backdrop-blur-sm">
                 <h2 class="luxury-font text-6xl mb-4">THE WINTER COLLECTION</h2>
-                <p class="uppercase tracking-widest text-sm">Timeless Elegance</p>
+                <p class="uppercase tracking-widest text-sm">Crafting Excellence</p>
             </div>
         </div>
     </section>
@@ -38,6 +39,38 @@
     <main class="max-w-7xl mx-auto px-6 py-20">
         <div id="product-grid" class="grid grid-cols-2 md:grid-cols-4 gap-8"></div>
     </main>
+
+    <div id="detail-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 modal-blur">
+        <div class="bg-white max-w-4xl w-full max-h-[90vh] overflow-y-auto flex flex-col md:flex-row relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-3xl z-10">&times;</button>
+            <div class="md:w-1/2 bg-stone-100">
+                <img id="modal-img" src="" class="w-full h-full object-cover">
+            </div>
+            <div class="md:w-1/2 p-10">
+                <h2 id="modal-title" class="luxury-font text-3xl mb-2"></h2>
+                <p id="modal-price" class="text-xl text-stone-600 mb-6 font-bold"></p>
+                
+                <div class="mb-8">
+                    <h4 class="text-[10px] uppercase font-bold tracking-widest mb-2 border-b pb-2">Description</h4>
+                    <p id="modal-desc" class="text-stone-500 text-sm leading-relaxed"></p>
+                </div>
+
+                <div class="mb-8">
+                    <h4 class="text-[10px] uppercase font-bold tracking-widest mb-2 border-b pb-2">Client Reviews</h4>
+                    <div class="space-y-4 mt-4">
+                        <div class="text-xs">
+                            <span class="text-amber-500">★★★★★</span>
+                            <p class="italic mt-1">"The leather quality is exceptional. Best purchase this year!"</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="modal-add-btn" class="w-full bg-black text-white py-4 uppercase tracking-[0.2em] text-[10px] font-bold hover:bg-stone-800 transition">
+                    Add to Bag
+                </button>
+            </div>
+        </div>
+    </div>
 
     <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/40 z-[60] hidden"></div>
     <div id="cart-sidebar" class="fixed top-0 right-0 w-full md:w-[400px] h-full bg-white z-[70] cart-sidebar shadow-2xl p-8 flex flex-col">
@@ -62,7 +95,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-16 mb-16">
                 <div>
                     <h2 class="luxury-font text-2xl tracking-widest mb-4">BELOW ZERO</h2>
-                    <p class="text-stone-300 text-sm opacity-80 italic">© 2024 Below Zero Maison.<br>Crafting excellence.</p>
+                    <p class="text-stone-300 text-sm opacity-80">© 2024 Below Zero Maison.<br>Crafting excellence.</p>
                 </div>
                 <div>
                     <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Quick Links</h4>
@@ -74,11 +107,7 @@
                 </div>
                 <div>
                     <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Support</h4>
-                    <p class="text-stone-400 text-sm leading-loose">
-                        Monday - Friday<br>
-                        9:00 AM - 6:00 PM<br>
-                        support@belowzero.com
-                    </p>
+                    <p class="text-stone-400 text-sm leading-loose">Monday - Friday<br>9:00 AM - 6:00 PM<br>support@belowzero.com</p>
                 </div>
             </div>
         </div>
@@ -86,28 +115,51 @@
 
     <script>
         let cart = [];
+        let productsData = [];
         let whatsappNum = "";
 
         fetch('/data.json').then(res => res.json()).then(data => {
             whatsappNum = data.whatsapp_number || "923000000000";
+            productsData = data.products;
             const grid = document.getElementById('product-grid');
             
             data.products.forEach((p, index) => {
-                // Undefined handle karne ke liye default name
-                const pName = p.product_title || "Luxury Leather Bag";
+                const pName = p.product_title || "Luxury Black Bag";
                 grid.innerHTML += `
-                    <div class="group cursor-pointer">
+                    <div class="group cursor-pointer" onclick="openProductDetail(${index})">
                         <div class="relative aspect-square overflow-hidden bg-stone-100 mb-4 border border-stone-100">
                             <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
-                            <button onclick="addToCart('${pName}', ${p.price}, '${p.image}')" class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                <span class="bg-white px-4 py-2 text-[10px] uppercase font-bold tracking-widest">+ Add to Bag</span>
-                            </button>
                         </div>
                         <h3 class="luxury-font text-sm tracking-wide">${pName}</h3>
                         <p class="text-stone-500 text-xs">Rs. ${p.price}</p>
                     </div>`;
             });
         });
+
+        function openProductDetail(index) {
+            const p = productsData[index];
+            const pName = p.product_title || "Luxury Bag";
+            
+            document.getElementById('modal-img').src = p.image;
+            document.getElementById('modal-title').innerText = pName;
+            document.getElementById('modal-price').innerText = `Rs. ${p.price}`;
+            document.getElementById('modal-desc').innerText = p.description || "Indulge in the luxury of hand-crafted leather. This piece is designed for timeless elegance and durability.";
+            
+            // Setup Add to Cart button in Modal
+            document.getElementById('modal-add-btn').onclick = (e) => {
+                e.stopPropagation();
+                addToCart(pName, p.price, p.image);
+                closeModal();
+            };
+
+            document.getElementById('detail-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('detail-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
 
         function addToCart(name, price, img) {
             cart.push({ name, price, img });
@@ -126,11 +178,11 @@
                 list.innerHTML += `
                     <div class="flex gap-4 items-center">
                         <img src="${item.img}" class="w-16 h-16 object-cover">
-                        <div class="flex-1">
-                            <h4 class="text-xs font-bold uppercase">${item.name}</h4>
-                            <p class="text-xs text-stone-500">Rs. ${item.price}</p>
+                        <div class="flex-1 text-xs">
+                            <h4 class="font-bold uppercase">${item.name}</h4>
+                            <p>Rs. ${item.price}</p>
                         </div>
-                        <button onclick="removeItem(${i})" class="text-[10px] text-red-400">X</button>
+                        <button onclick="removeItem(${i})" class="text-red-300">X</button>
                     </div>`;
             });
             document.getElementById('cart-count').innerText = cart.length;
@@ -147,7 +199,7 @@
             if(!cart.length) return;
             let msg = "*ORDER DETAILS FROM BELOW ZERO*%0A%0A";
             cart.forEach(item => {
-                msg += `👜 *${item.name}*%0APrice: Rs. ${item.price}%0AImage: ${item.img}%0A%0A`;
+                msg += `👜 *${item.name}*%0APrice: Rs. ${item.price}%0AImage Link: ${item.img}%0A%0A`;
             });
             msg += `*TOTAL: ${document.getElementById('cart-total').innerText}*`;
             window.location.href = `https://wa.me/${whatsappNum}?text=${msg}`;
