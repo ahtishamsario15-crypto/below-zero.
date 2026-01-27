@@ -5,89 +5,149 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Below Zero | Luxury Handbag Boutique</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; background-color: #faf9f6; color: #1c1917; }
-        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
-        .animate-slide-up { animation: slide-up 0.8s ease-out forwards; }
-        @keyframes slide-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        body { font-family: 'Inter', sans-serif; background-color: #faf9f6; color: #1c1917; }
+        .luxury-font { font-family: 'Playfair Display', serif; }
+        .cart-sidebar { transition: transform 0.3s ease-in-out; transform: translateX(100%); }
+        .cart-open .cart-sidebar { transform: translateX(0); }
     </style>
 </head>
-<body>
-    <nav class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md z-50 border-b border-stone-200">
-        <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
-            <div class="w-48 hidden md:block"></div>
-            <h1 class="text-3xl font-serif tracking-tighter text-stone-900 uppercase">BELOW ZERO</h1>
-            <div class="flex items-center space-x-6 w-48 justify-end">
-                <a href="/admin/" class="text-stone-400 hover:text-stone-900 text-xs uppercase tracking-widest font-bold">Admin</a>
-            </div>
-        </div>
+<body class="relative">
+
+    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-sm z-50 border-b border-stone-200 py-6 px-10 flex justify-between items-center">
+        <div class="w-10"></div>
+        <h1 class="luxury-font text-3xl tracking-[0.3em] uppercase cursor-pointer" onclick="window.location.reload()">BELOW ZERO</h1>
+        <button onclick="toggleCart()" class="relative p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span id="cart-count" class="absolute top-0 right-0 bg-black text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
+        </button>
     </nav>
 
-    <div class="relative h-[80vh] flex items-center overflow-hidden pt-20">
-        <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1547949003-9792a18a2601?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover brightness-75">
-            <div class="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent"></div>
+    <main class="max-w-7xl mx-auto px-6 py-32 min-h-screen">
+        <div id="product-grid" class="grid grid-cols-1 md:grid-cols-3 gap-12"></div>
+    </main>
+
+    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/40 z-[60] hidden"></div>
+    <div id="cart-sidebar" class="fixed top-0 right-0 w-full md:w-[400px] h-full bg-white z-[70] cart-sidebar shadow-2xl p-8 flex flex-col">
+        <div class="flex justify-between items-center mb-8 border-b pb-4">
+            <h2 class="luxury-font text-xl uppercase tracking-widest font-bold">Your Selection</h2>
+            <button onclick="toggleCart()" class="text-2xl">&times;</button>
         </div>
-        <div class="relative z-10 max-w-7xl mx-auto px-4 w-full">
-            <div class="max-w-xl animate-slide-up">
-                <span class="text-amber-200 text-sm font-semibold tracking-[0.3em] uppercase mb-4 block">New Collection 2024</span>
-                <h2 class="text-6xl text-white font-serif leading-none mb-8">Carry the <br> <span class="italic">Extraordinary</span></h2>
-                <div class="h-1 w-12 bg-amber-400"></div>
+        <div id="cart-items" class="flex-1 overflow-y-auto space-y-6">
+            <p class="text-stone-400 italic">Your bag is empty.</p>
+        </div>
+        <div class="border-t border-stone-100 pt-6 mt-6">
+            <div class="flex justify-between text-xl luxury-font mb-6">
+                <span>Total:</span>
+                <span id="cart-total">Rs. 0</span>
             </div>
+            <button onclick="checkoutWhatsApp()" class="w-full bg-black text-white py-4 uppercase tracking-[0.2em] text-xs font-bold hover:bg-stone-800 transition">
+                Confirm Order via WhatsApp
+            </button>
         </div>
     </div>
 
-    <main class="max-w-7xl mx-auto px-4 py-24">
-        <div class="mb-16">
-            <h2 class="text-5xl font-serif text-stone-900">The Collection</h2>
-            <p id="announcement" class="text-amber-800 mt-2 italic"></p>
-        </div>
-        
-        <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
+    <footer class="bg-white border-t border-stone-200 pt-20 pb-10 mt-20">
+        <div class="max-w-7xl mx-auto px-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-16 text-center md:text-left mb-16">
+                <div>
+                    <h2 class="luxury-font text-2xl tracking-widest uppercase mb-6">BELOW ZERO</h2>
+                    <p class="text-stone-500 text-sm leading-relaxed italic">"True luxury is not just what you carry, but the story you tell."</p>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-[0.2em] mb-6">Quick Links</h4>
+                    <ul class="text-stone-500 text-sm space-y-4">
+                        <li><a href="#" class="hover:text-black transition">Home</a></li>
+                        <li><a href="#" class="hover:text-black transition">New Collection</a></li>
+                        <li><a href="/admin/" class="hover:text-black transition">Store Manager</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-[0.2em] mb-6">Customer Care</h4>
+                    <ul class="text-stone-500 text-sm space-y-4">
+                        <li><span class="text-stone-900 font-medium">Free Shipping</span> on all local orders.</li>
+                        <li><a href="#" class="hover:text-black transition">Product Care Guide</a></li>
+                        <li><a href="#" class="hover:text-black transition">Returns & Exchanges</a></li>
+                    </ul>
+                </div>
             </div>
-    </main>
-
-    <footer class="bg-stone-900 text-stone-400 py-20">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <h1 class="text-2xl font-serif text-white mb-6 uppercase tracking-widest">BELOW ZERO</h1>
-            <p class="text-[10px] uppercase tracking-widest">© 2024 Below Zero Maison. Crafting excellence.</p>
+            <div class="border-t border-stone-100 pt-8 text-center">
+                <p class="text-[10px] text-stone-400 uppercase tracking-[0.3em]">
+                    © 2024 Below Zero Maison. Crafting excellence.
+                </p>
+            </div>
         </div>
     </footer>
 
     <script>
-        // Admin Panel ka data fetch karna
-        fetch('/data.json')
-            .then(response => response.json())
-            .then(data => {
-                const grid = document.getElementById('product-grid');
-                const whatsapp = data.whatsapp_number || "923000000000";
-                
-                // Bags loop
-                data.products.forEach(product => {
-                    const title = product.product_title || "Luxury Bag";
-                    const card = `
-                        <div class="group">
-                            <div class="relative aspect-[4/5] overflow-hidden bg-stone-100 mb-6">
-                                <img src="${product.image}" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
-                            </div>
-                            <div class="text-center">
-                                <p class="text-[10px] text-stone-400 uppercase tracking-[0.2em] mb-2">Below Zero Maison</p>
-                                <h3 class="text-xl font-serif text-stone-900 mb-2">${title}</h3>
-                                <p class="text-lg text-stone-600 mb-6">Rs. ${product.price}</p>
-                                <a href="https://wa.me/${whatsapp}?text=I want to order: ${title}" 
-                                   class="inline-block border border-stone-900 px-8 py-3 text-xs uppercase tracking-widest font-bold hover:bg-stone-900 hover:text-white transition-all">
-                                   Acquire Piece
-                                </a>
-                            </div>
+        let cart = [];
+        let whatsappNum = "";
+
+        fetch('/data.json').then(res => res.json()).then(data => {
+            whatsappNum = data.whatsapp_number || "923000000000";
+            const grid = document.getElementById('product-grid');
+            data.products.forEach((p, index) => {
+                grid.innerHTML += `
+                    <div class="group bg-white border border-stone-100 p-4 rounded-sm hover:shadow-xl transition-shadow duration-500">
+                        <div class="relative aspect-[4/5] overflow-hidden mb-6 bg-stone-50">
+                            <img src="${p.image}" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
                         </div>
-                    `;
-                    grid.innerHTML += card;
-                });
-            })
-            .catch(err => console.error("Data load nahi hua:", err));
+                        <div class="text-center">
+                            <h3 class="luxury-font text-lg mb-2">${p.product_title}</h3>
+                            <p class="text-stone-500 mb-6 font-medium">Rs. ${p.price}</p>
+                            <button onclick="addToCart('${p.product_title}', ${p.price})" class="w-full border border-black py-3 text-[10px] uppercase font-bold tracking-widest hover:bg-black hover:text-white transition-all duration-300">
+                                Add to Bag
+                            </button>
+                        </div>
+                    </div>`;
+            });
+        });
+
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            updateCart();
+            if(!document.body.classList.contains('cart-open')) toggleCart();
+        }
+
+        function updateCart() {
+            const list = document.getElementById('cart-items');
+            const count = document.getElementById('cart-count');
+            const total = document.getElementById('cart-total');
+            list.innerHTML = cart.length ? '' : '<p class="text-stone-400 italic">Your bag is empty.</p>';
+            let sum = 0;
+            cart.forEach((item, i) => {
+                sum += item.price;
+                list.innerHTML += `
+                    <div class="flex justify-between items-center border-b border-stone-50 pb-4">
+                        <div>
+                            <h4 class="text-sm font-bold">${item.name}</h4>
+                            <p class="text-xs text-stone-400 font-medium">Rs. ${item.price}</p>
+                        </div>
+                        <button onclick="removeItem(${i})" class="text-stone-300 hover:text-red-400 text-[10px] uppercase font-bold">Remove</button>
+                    </div>`;
+            });
+            count.innerText = cart.length;
+            total.innerText = `Rs. ${sum}`;
+        }
+
+        function removeItem(i) {
+            cart.splice(i, 1);
+            updateCart();
+        }
+
+        function toggleCart() {
+            document.body.classList.toggle('cart-open');
+            document.getElementById('cart-overlay').classList.toggle('hidden');
+        }
+
+        function checkoutWhatsApp() {
+            if(!cart.length) return alert("Please add items first");
+            let message = "*NEW ORDER - BELOW ZERO*%0A%0A";
+            cart.forEach(item => message += `• ${item.name} (Rs. ${item.price})%0A`);
+            message += `%0A*Total Amount: ${document.getElementById('cart-total').innerText}*%0A%0APlease confirm my order.`;
+            window.location.href = `https://wa.me/${whatsappNum}?text=${message}`;
+        }
     </script>
 </body>
 </html>
