@@ -5,45 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Below Zero | Luxury Handbags</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .luxury-title { font-family: 'Playfair Display', serif; }
+    </style>
 </head>
-<body class="bg-gray-100">
-    <nav class="bg-black text-white p-4 text-center text-xl font-bold uppercase tracking-widest">
-        Below Zero
+<body class="bg-gray-50 text-gray-900">
+    <div id="announcement-bar" class="bg-yellow-400 text-black text-center py-2 text-xs font-bold tracking-widest uppercase">
+        </div>
+
+    <nav class="bg-white border-b border-gray-200 py-6">
+        <h1 id="brand-name" class="luxury-title text-3xl text-center tracking-[0.3em] uppercase">BELOW ZERO</h1>
     </nav>
 
-    <div id="announcement" class="bg-yellow-400 text-center py-2 text-sm font-bold"></div>
-
-    <div class="container mx-auto px-4 py-8">
-        <div id="product-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <main class="container mx-auto px-4 py-12">
+        <div id="bag-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             </div>
-    </div>
+    </main>
 
     <script>
-        // Data fetch karne ka function
         fetch('/data.json')
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
-                // Announcement set karein
-                document.getElementById('announcement').innerText = data.announcement || "Welcome to Below Zero";
-                
-                const grid = document.getElementById('product-grid');
-                data.products.forEach(product => {
-                    const card = `
-                        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                            <img src="${product.image}" alt="${product.name}" class="w-full h-64 object-cover">
-                            <div class="p-4 text-center">
-                                <h2 class="text-xl font-bold">${product.name}</h2>
-                                <p class="text-gray-600 my-2">Rs. ${product.price}</p>
-                                <a href="https://wa.me/${data.whatsapp}?text=I want to buy ${product.name}" 
-                                   class="inline-block bg-green-500 text-white px-6 py-2 rounded-full font-bold hover:bg-green-600 transition">
-                                   Order on WhatsApp
+                // Settings load karein
+                document.getElementById('brand-name').innerText = data.brand_name || "BELOW ZERO";
+                document.getElementById('announcement-bar').innerText = data.announcement_bar || "Free Shipping on All Orders";
+
+                const list = document.getElementById('bag-list');
+                const whatsapp = data.whatsapp_number || "923000000000";
+
+                // Bags load karein
+                data.products.forEach(bag => {
+                    // Yahan hum 'product_title' istemal kar rahe hain jo aapke admin mein hai
+                    const title = bag.product_title || "Luxury Bag"; 
+                    
+                    list.innerHTML += `
+                        <div class="group bg-white rounded-xl shadow-sm hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100">
+                            <div class="relative overflow-hidden h-80">
+                                <img src="${bag.image}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            </div>
+                            <div class="p-6 text-center">
+                                <h3 class="luxury-title text-xl mb-2">${title}</h3>
+                                <p class="text-gray-500 font-semibold mb-4">Rs. ${bag.price}</p>
+                                <a href="https://wa.me/${whatsapp}?text=I am interested in: ${title}" 
+                                   class="block w-full bg-black text-white py-3 rounded-lg font-bold tracking-widest uppercase text-xs hover:bg-gray-800 transition">
+                                   Order via WhatsApp
                                 </a>
                             </div>
-                        </div>`;
-                    grid.innerHTML += card;
+                        </div>
+                    `;
                 });
-            })
-            .catch(err => console.error("Data load nahi hua:", err));
+            });
     </script>
 </body>
 </html>
