@@ -1,0 +1,28 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images"
+public_folder: "images"
+
+collections:
+  - name: "settings"
+    label: "Website Settings"
+    files:
+      - file: "data.json"
+        label: "Main Content"
+        name: "content"
+        fields:
+          - { label: "Brand Name", name: "brandName", widget: "string" }
+          - { label: "Announcement Bar", name: "announcement", widget: "string" }
+          - { label: "WhatsApp Number", name: "whatsapp", widget: "string" }
+          - label: "Products"
+            name: "products"
+            widget: "list"
+            summary: '{{fields.title}}'
+            fields:
+              - { label: "Product Title", name: "title", widget: "string" }
+              - { label: "Price", name: "price", widget: "string" }
+              - { label: "Image", name: "image", widget: "image" }
+              - { label: "Sale Tag", name: "saleTag", widget: "string", required: false }
+              - { label: "Stock Status", name: "status", widget: "select", options: ["In Stock", "Out of Stock"] }
