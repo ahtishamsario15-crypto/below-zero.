@@ -4,11 +4,39 @@
   "whatsapp": "923000000000",
   "products": [
     {
-      "title": "Lady Bags",
+      "title": "Lady Bags 1",
       "price": "1500",
       "image": "https://images.unsplash.com/photo-1584917865442-de89df76afd3",
       "saleTag": "20% OFF",
       "status": "In Stock"
+    },
+    {
+      "image": "images/610547286_1314158137396140_5278423076744689337_n.png",
+      "title": "Lady Bags 2",
+      "saleTag": "20% OFF",
+      "status": "In Stock",
+      "price": "1000"
+    },
+    {
+      "image": "images/617752163_1942360103022813_2897886712991832358_n.png",
+      "title": "Lady Bags 3",
+      "price": "1000",
+      "status": "In Stock",
+      "saleTag": "20% OFF"
+    },
+    {
+      "image": "images/618736897_1591024822330949_5754127660801377805_n.png",
+      "saleTag": "20% OFF",
+      "status": "In Stock",
+      "title": "Lady Bags 4",
+      "price": "1000"
+    },
+    {
+      "image": "images/620637700_26192878373638242_8537716485695110806_n.png",
+      "title": "Lady Bags 5",
+      "price": "1000",
+      "status": "In Stock",
+      "saleTag": "20% OFF"
     }
   ]
 }
