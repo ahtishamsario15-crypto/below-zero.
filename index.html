@@ -5,110 +5,128 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Below Zero | Luxury Boutique</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.0.28/build/spline-viewer.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #1a1a1a; }
+        body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #1a1a1a; overflow-x: hidden; }
         .luxury-font { font-family: 'Playfair Display', serif; }
-        .cart-sidebar { transition: transform 0.4s ease; transform: translateX(100%); }
+        .cart-sidebar { transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1); transform: translateX(100%); }
         .cart-open .cart-sidebar { transform: translateX(0); }
-        .footer-brown { background-color: #3d2b1f; color: #f5f5f5; }
-        .modal-blur { backdrop-filter: blur(8px); background-color: rgba(0,0,0,0.5); }
+        .footer-brown { background-color: #1a1a1a; color: #f5f5f5; }
+        .modal-blur { backdrop-filter: blur(12px); background-color: rgba(255,255,255,0.7); }
+        
+        /* 3D Hero Styles */
+        .hero-container { height: 90vh; position: relative; overflow: hidden; background: #000; }
+        .spline-wrap { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        .hero-content { z-index: 10; pointer-events: none; }
+        
+        /* Product Card Animation */
+        .product-card { transition: all 0.4s ease; }
+        .product-card:hover { transform: translateY(-10px); }
     </style>
 </head>
 <body class="relative">
 
-    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 border-b border-stone-100 py-6 px-10 flex justify-between items-center">
-        <div class="w-10"></div>
-        <h1 class="luxury-font text-3xl tracking-[0.4em] uppercase font-bold cursor-pointer" onclick="window.location.reload()">BELOW ZERO</h1>
-        <button onclick="toggleCart()" class="relative">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-            <span id="cart-count" class="absolute -top-2 -right-2 bg-black text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
+    <nav class="fixed top-0 w-full bg-white/70 backdrop-blur-xl z-[100] border-b border-stone-100 py-6 px-6 md:px-10 flex justify-between items-center">
+        <div class="hidden md:block text-[10px] tracking-[0.2em] font-bold text-stone-400">EST. 2024</div>
+        <h1 class="luxury-font text-2xl md:text-3xl tracking-[0.5em] uppercase font-bold cursor-pointer text-center" onclick="window.location.reload()">BELOW ZERO</h1>
+        <button onclick="toggleCart()" class="relative group">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" class="group-hover:scale-110 transition"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span id="cart-count" class="absolute -top-1 -right-1 bg-black text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
         </button>
     </nav>
 
-    <section class="relative h-[80vh] w-full mt-20">
-        <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=2000" class="w-full h-full object-cover">
-        <div class="absolute inset-0 flex items-center justify-center">
-            <div class="text-center text-white bg-black/20 p-10 backdrop-blur-sm">
-                <h2 class="luxury-font text-6xl mb-4">THE WINTER COLLECTION</h2>
-                <p class="uppercase tracking-widest text-sm">Crafting Excellence</p>
-            </div>
+    <section class="hero-container flex items-center justify-center mt-20">
+        <div class="spline-wrap">
+            <spline-viewer url="https://prod.spline.design/S68-Vf-m4vj-D1E0/scene.splinecode"></spline-viewer>
+        </div>
+        
+        <div class="hero-content text-center text-white px-6">
+            <h2 class="luxury-font text-5xl md:text-8xl mb-6 tracking-tight animate-fade-in">Maison de Luxe</h2>
+            <div class="h-px w-20 bg-white/40 mx-auto mb-6"></div>
+            <p class="uppercase tracking-[0.5em] text-[10px] md:text-xs font-light opacity-80">The Art of Modern Elegance</p>
+        </div>
+
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+            <div class="w-px h-12 bg-white/30"></div>
         </div>
     </section>
 
-    <main class="max-w-7xl mx-auto px-6 py-20">
-        <div id="product-grid" class="grid grid-cols-2 md:grid-cols-4 gap-8"></div>
+    <main class="max-w-7xl mx-auto px-6 py-24">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
+            <div>
+                <span class="text-[10px] uppercase tracking-[0.3em] text-stone-400 font-bold mb-2 block">Curated Selection</span>
+                <h2 class="luxury-font text-4xl md:text-5xl italic">Winter Collection</h2>
+            </div>
+            <p class="text-stone-400 text-sm max-w-xs text-right hidden md:block">Hand-crafted pieces designed for those who define excellence.</p>
+        </div>
+        
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-16"></div>
     </main>
 
-    <div id="detail-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 modal-blur">
-        <div class="bg-white max-w-4xl w-full max-h-[90vh] overflow-y-auto flex flex-col md:flex-row relative">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-3xl z-10">&times;</button>
-            <div class="md:w-1/2 bg-stone-100">
-                <img id="modal-img" src="" class="w-full h-full object-cover">
+    <div id="detail-modal" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-4 modal-blur transition-all">
+        <div class="bg-white max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col md:flex-row relative shadow-2xl rounded-sm">
+            <button onclick="closeModal()" class="absolute top-6 right-6 text-2xl z-50 hover:rotate-90 transition">&times;</button>
+            <div class="md:w-3/5 bg-stone-50 overflow-hidden">
+                <img id="modal-img" src="" class="w-full h-full object-cover scale-100 hover:scale-110 transition duration-1000">
             </div>
-            <div class="md:w-1/2 p-10">
-                <h2 id="modal-title" class="luxury-font text-3xl mb-2"></h2>
-                <p id="modal-price" class="text-xl text-stone-600 mb-6 font-bold"></p>
+            <div class="md:w-2/5 p-8 md:p-12 flex flex-col justify-center">
+                <span class="text-[9px] uppercase tracking-[0.3em] text-stone-400 mb-2">Exclusively at Below Zero</span>
+                <h2 id="modal-title" class="luxury-font text-4xl mb-4"></h2>
+                <p id="modal-price" class="text-2xl text-stone-900 mb-8 font-light"></p>
                 
-                <div class="mb-8">
-                    <h4 class="text-[10px] uppercase font-bold tracking-widest mb-2 border-b pb-2">Description</h4>
-                    <p id="modal-desc" class="text-stone-500 text-sm leading-relaxed"></p>
+                <div class="mb-10">
+                    <h4 class="text-[10px] uppercase font-bold tracking-widest mb-4 border-b border-stone-100 pb-2">Description</h4>
+                    <p id="modal-desc" class="text-stone-500 text-sm leading-relaxed font-light"></p>
                 </div>
 
-                <div class="mb-8">
-                    <h4 class="text-[10px] uppercase font-bold tracking-widest mb-2 border-b pb-2">Client Reviews</h4>
-                    <div class="space-y-4 mt-4">
-                        <div class="text-xs">
-                            <span class="text-amber-500">★★★★★</span>
-                            <p class="italic mt-1">"The leather quality is exceptional. Best purchase this year!"</p>
-                        </div>
-                    </div>
-                </div>
-
-                <button id="modal-add-btn" class="w-full bg-black text-white py-4 uppercase tracking-[0.2em] text-[10px] font-bold hover:bg-stone-800 transition">
+                <button id="modal-add-btn" class="w-full bg-black text-white py-5 uppercase tracking-[0.3em] text-[10px] font-bold hover:bg-stone-800 transition-all hover:tracking-[0.4em]">
                     Add to Bag
                 </button>
             </div>
         </div>
     </div>
 
-    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/40 z-[60] hidden"></div>
-    <div id="cart-sidebar" class="fixed top-0 right-0 w-full md:w-[400px] h-full bg-white z-[70] cart-sidebar shadow-2xl p-8 flex flex-col">
-        <div class="flex justify-between items-center mb-8 border-b pb-4">
-            <h2 class="luxury-font text-xl uppercase tracking-widest">My Selection</h2>
-            <button onclick="toggleCart()" class="text-2xl">&times;</button>
+    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/60 z-[150] hidden backdrop-blur-sm"></div>
+    <div id="cart-sidebar" class="fixed top-0 right-0 w-full md:w-[450px] h-full bg-white z-[160] cart-sidebar shadow-2xl p-10 flex flex-col">
+        <div class="flex justify-between items-center mb-12">
+            <h2 class="luxury-font text-2xl uppercase tracking-widest">My Selection</h2>
+            <button onclick="toggleCart()" class="text-3xl font-light">&times;</button>
         </div>
-        <div id="cart-items" class="flex-1 overflow-y-auto space-y-6"></div>
-        <div class="border-t pt-6">
-            <div class="flex justify-between text-xl mb-6 luxury-font">
-                <span>Total:</span>
+        <div id="cart-items" class="flex-1 overflow-y-auto space-y-8 pr-4"></div>
+        <div class="border-t border-stone-100 pt-8 mt-4">
+            <div class="flex justify-between text-2xl mb-8 luxury-font italic">
+                <span>Total</span>
                 <span id="cart-total">Rs. 0</span>
             </div>
-            <button onclick="checkoutWhatsApp()" class="w-full bg-black text-white py-4 uppercase tracking-widest text-xs font-bold hover:bg-stone-800 transition">
-                Checkout via WhatsApp
+            <button onclick="checkoutWhatsApp()" class="w-full bg-black text-white py-5 uppercase tracking-[0.3em] text-[10px] font-bold hover:bg-stone-900 transition-all">
+                Finalize via WhatsApp
             </button>
         </div>
     </div>
 
-    <footer class="footer-brown pt-20 pb-10">
+    <footer class="footer-brown pt-24 pb-12">
         <div class="max-w-7xl mx-auto px-10">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-16 mb-16">
-                <div>
-                    <h2 class="luxury-font text-2xl tracking-widest mb-4">BELOW ZERO</h2>
-                    <p class="text-stone-300 text-sm opacity-80">© 2024 Below Zero Maison.<br>Crafting excellence.</p>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
+                <div class="md:col-span-2">
+                    <h2 class="luxury-font text-3xl tracking-[0.4em] mb-6">BELOW ZERO</h2>
+                    <p class="text-stone-500 text-sm max-w-sm leading-loose uppercase tracking-widest text-[9px]">An ode to craftsmanship and timeless aesthetics. We define luxury through silence and precision.</p>
                 </div>
                 <div>
-                    <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Quick Links</h4>
-                    <ul class="text-stone-400 text-sm space-y-3">
-                        <li><a href="#" class="hover:text-white transition">Home</a></li>
-                        <li><a href="#" class="hover:text-white transition">Free Shipping</a></li>
-                        <li><a href="/admin/" class="hover:text-white transition">Store Manager</a></li>
+                    <h4 class="text-[10px] font-bold uppercase tracking-widest mb-8 text-stone-400">Discover</h4>
+                    <ul class="text-stone-500 text-xs space-y-4">
+                        <li><a href="#" class="hover:text-white transition">The Winter Issue</a></li>
+                        <li><a href="/admin/" class="hover:text-white transition">Maison Manager</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Support</h4>
-                    <p class="text-stone-400 text-sm leading-loose">Monday - Friday<br>9:00 AM - 6:00 PM<br>support@belowzero.com</p>
+                    <h4 class="text-[10px] font-bold uppercase tracking-widest mb-8 text-stone-400">Contact</h4>
+                    <p class="text-stone-500 text-xs leading-loose italic serif">Atelier Private Line:<br>support@belowzero.com</p>
                 </div>
+            </div>
+            <div class="border-t border-stone-800/50 pt-8 text-center">
+                <p class="text-[9px] uppercase tracking-[0.4em] text-stone-600">© 2024 Below Zero Maison. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
@@ -120,38 +138,36 @@
 
         fetch('/data.json').then(res => res.json()).then(data => {
             whatsappNum = data.whatsapp_number || "923000000000";
-            productsData = data.products;
+            productsData = data.products || [];
             const grid = document.getElementById('product-grid');
             
-            data.products.forEach((p, index) => {
-                const pName = p.product_title || "Luxury Black Bag";
+            productsData.forEach((p, index) => {
+                const pName = p.product_title || "Luxury Piece";
                 grid.innerHTML += `
-                    <div class="group cursor-pointer" onclick="openProductDetail(${index})">
-                        <div class="relative aspect-square overflow-hidden bg-stone-100 mb-4 border border-stone-100">
-                            <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                    <div class="product-card group cursor-pointer" onclick="openProductDetail(${index})">
+                        <div class="relative aspect-[3/4] overflow-hidden bg-stone-50 mb-6 rounded-sm">
+                            <img src="${p.image}" class="w-full h-full object-cover transition duration-1000 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition duration-500"></div>
+                            <div class="absolute bottom-4 left-4 right-4 bg-white/80 backdrop-blur-md py-3 text-center opacity-0 group-hover:opacity-100 transition duration-500 transform translate-y-4 group-hover:translate-y-0">
+                                <span class="text-[9px] uppercase font-bold tracking-widest">View Details</span>
+                            </div>
                         </div>
-                        <h3 class="luxury-font text-sm tracking-wide">${pName}</h3>
-                        <p class="text-stone-500 text-xs">Rs. ${p.price}</p>
+                        <h3 class="luxury-font text-sm tracking-widest mb-1">${pName}</h3>
+                        <p class="text-stone-400 text-[11px] font-semibold uppercase tracking-tighter">Rs. ${p.price}</p>
                     </div>`;
             });
         });
 
         function openProductDetail(index) {
             const p = productsData[index];
-            const pName = p.product_title || "Luxury Bag";
-            
             document.getElementById('modal-img').src = p.image;
-            document.getElementById('modal-title').innerText = pName;
+            document.getElementById('modal-title').innerText = p.product_title || "Luxury Piece";
             document.getElementById('modal-price').innerText = `Rs. ${p.price}`;
-            document.getElementById('modal-desc').innerText = p.description || "Indulge in the luxury of hand-crafted leather. This piece is designed for timeless elegance and durability.";
-            
-            // Setup Add to Cart button in Modal
-            document.getElementById('modal-add-btn').onclick = (e) => {
-                e.stopPropagation();
-                addToCart(pName, p.price, p.image);
+            document.getElementById('modal-desc').innerText = p.description || "A masterclass in luxury design.";
+            document.getElementById('modal-add-btn').onclick = () => {
+                addToCart(p.product_title, p.price, p.image);
                 closeModal();
             };
-
             document.getElementById('detail-modal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
@@ -164,32 +180,35 @@
         function addToCart(name, price, img) {
             cart.push({ name, price, img });
             updateCart();
-            if(!document.body.classList.contains('cart-open')) toggleCart();
+            toggleCart();
         }
 
         function updateCart() {
             const list = document.getElementById('cart-items');
             const total = document.getElementById('cart-total');
-            list.innerHTML = cart.length ? '' : '<p class="text-stone-400">Empty</p>';
+            list.innerHTML = cart.length ? '' : '<p class="text-stone-300 italic text-sm">Your selection is empty.</p>';
             let sum = 0;
             
             cart.forEach((item, i) => {
-                sum += item.price;
+                sum += Number(item.price.toString().replace(/,/g, ''));
                 list.innerHTML += `
-                    <div class="flex gap-4 items-center">
-                        <img src="${item.img}" class="w-16 h-16 object-cover">
-                        <div class="flex-1 text-xs">
-                            <h4 class="font-bold uppercase">${item.name}</h4>
-                            <p>Rs. ${item.price}</p>
+                    <div class="flex gap-6 items-center group">
+                        <div class="w-20 h-24 bg-stone-50 overflow-hidden rounded-sm">
+                            <img src="${item.img}" class="w-full h-full object-cover">
                         </div>
-                        <button onclick="removeItem(${i})" class="text-red-300">X</button>
+                        <div class="flex-1">
+                            <h4 class="luxury-font text-xs uppercase tracking-widest mb-1">${item.name}</h4>
+                            <p class="text-stone-400 text-[10px]">Rs. ${item.price}</p>
+                            <button onclick="removeItem(${i})" class="text-[9px] uppercase tracking-widest text-red-800 mt-2 opacity-0 group-hover:opacity-100 transition">Remove</button>
+                        </div>
                     </div>`;
             });
             document.getElementById('cart-count').innerText = cart.length;
-            total.innerText = `Rs. ${sum}`;
+            total.innerText = `Rs. ${sum.toLocaleString()}`;
         }
 
         function removeItem(i) { cart.splice(i, 1); updateCart(); }
+        
         function toggleCart() { 
             document.body.classList.toggle('cart-open');
             document.getElementById('cart-overlay').classList.toggle('hidden');
@@ -197,11 +216,11 @@
 
         function checkoutWhatsApp() {
             if(!cart.length) return;
-            let msg = "*ORDER DETAILS FROM BELOW ZERO*%0A%0A";
+            let msg = "*NEW LUXURY ORDER - BELOW ZERO*%0A%0A";
             cart.forEach(item => {
-                msg += `👜 *${item.name}*%0APrice: Rs. ${item.price}%0AImage Link: ${item.img}%0A%0A`;
+                msg += `👜 *${item.name}*%0APrice: Rs. ${item.price}%0A%0A`;
             });
-            msg += `*TOTAL: ${document.getElementById('cart-total').innerText}*`;
+            msg += `*TOTAL AMOUNT: ${document.getElementById('cart-total').innerText}*`;
             window.location.href = `https://wa.me/${whatsappNum}?text=${msg}`;
         }
     </script>
