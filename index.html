@@ -3,159 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Below Zero | Luxury Boutique</title>
+    <title>Below Zero | Luxury 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #1a1a1a; overflow-x: hidden; }
+        body { margin: 0; background-color: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        canvas { position: fixed; top: 0; left: 0; outline: none; z-index: 1; }
         .luxury-font { font-family: 'Playfair Display', serif; }
         
-        /* 3D Floating Animation */
-        .hero-3d-layer {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(45deg, #000 0%, #1a1a1a 100%);
-            perspective: 1000px;
-            overflow: hidden;
-        }
-
-        /* Floating 3D Shapes */
-        .shape {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(5px);
-            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-            animation: morph 15s linear infinite;
-            z-index: 2;
-        }
-
-        @keyframes morph {
-            0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: rotate(0deg) scale(1); }
-            50% { border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%; transform: rotate(180deg) scale(1.2); }
-            100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: rotate(360deg) scale(1); }
-        }
-
-        .cart-sidebar { transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1); transform: translateX(100%); }
-        .cart-open .cart-sidebar { transform: translateX(0); }
+        /* Content Overlay */
+        .content-wrapper { position: relative; z-index: 10; pointer-events: none; }
+        .pointer-auto { pointer-events: auto; }
         
-        /* Glass Card */
-        .glass-hero {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 3rem;
-            border-radius: 2px;
-            z-index: 10;
-        }
+        .hero-section { height: 100vh; display: flex; flex-direction: column; items-center; justify-content: center; text-align: center; }
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 4rem; border-radius: 4px; }
+        
+        .product-card { background: rgba(0,0,0,0.6); border: 1px solid #222; transition: all 0.5s ease; }
+        .product-card:hover { border-color: #fff; transform: translateY(-10px); }
     </style>
 </head>
-<body class="relative">
+<body>
 
-    <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md z-[100] border-b border-stone-100 py-6 px-10 flex justify-between items-center">
-        <div class="w-10"></div>
-        <h1 class="luxury-font text-3xl tracking-[0.4em] uppercase font-bold cursor-pointer" onclick="window.location.reload()">BELOW ZERO</h1>
-        <button onclick="toggleCart()" class="relative">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-            <span id="cart-count" class="absolute -top-2 -right-2 bg-black text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
-        </button>
-    </nav>
+    <canvas id="bg-canvas"></canvas>
 
-    <section class="relative h-[90vh] w-full mt-20 flex items-center justify-center bg-black overflow-hidden" id="hero-trigger">
-        <div class="hero-3d-layer" id="parallax-bg">
-            <div class="shape w-64 h-64 top-10 left-10 opacity-20"></div>
-            <div class="shape w-96 h-96 -bottom-20 -right-20 opacity-10" style="animation-duration: 25s"></div>
-            <div class="shape w-48 h-48 top-1/2 left-1/4 opacity-15" style="animation-duration: 20s"></div>
-        </div>
+    <div class="content-wrapper">
+        <nav class="fixed top-0 w-full py-8 px-12 flex justify-between items-center pointer-auto">
+            <h1 class="luxury-font text-2xl tracking-[0.6em] font-bold">BELOW ZERO</h1>
+            <button onclick="toggleCart()" class="text-sm tracking-widest uppercase border-b border-white">Bag (0)</button>
+        </nav>
 
-        <div class="glass-hero text-center text-white transition-transform duration-300" id="hero-card">
-            <h2 class="luxury-font text-5xl md:text-7xl mb-4 tracking-tighter italic">Winter Collection</h2>
-            <p class="uppercase tracking-[0.6em] text-[10px] opacity-70">Elevating the essence of Luxury</p>
-            <div class="mt-8 flex justify-center gap-4">
-                <div class="w-12 h-px bg-white/30 self-center"></div>
-                <span class="text-[9px] font-bold">PARIS • MILAN • DUBAI</span>
-                <div class="w-12 h-px bg-white/30 self-center"></div>
+        <section class="hero-section px-6">
+            <div class="glass-card animate-fade-in pointer-auto">
+                <span class="text-[10px] uppercase tracking-[0.8em] text-stone-400 mb-4 block">New Dimension of Fashion</span>
+                <h2 class="luxury-font text-6xl md:text-9xl mb-6 italic tracking-tighter">Luxury 3D</h2>
+                <p class="uppercase tracking-[0.4em] text-[11px] opacity-60 max-w-lg mx-auto leading-loose">Precision crafted leather goods. Experience the future of retail.</p>
+                <a href="#collection" class="mt-10 inline-block px-12 py-4 border border-white text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition duration-500">Enter Gallery</a>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <main class="max-w-7xl mx-auto px-6 py-24">
-        <div id="product-grid" class="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-16"></div>
-    </main>
-
-    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/40 z-[150] hidden"></div>
-    <div id="cart-sidebar" class="fixed top-0 right-0 w-full md:w-[400px] h-full bg-white z-[160] cart-sidebar shadow-2xl p-8 flex flex-col">
-        <div class="flex justify-between items-center mb-8 border-b pb-4">
-            <h2 class="luxury-font text-xl uppercase tracking-widest">My Selection</h2>
-            <button onclick="toggleCart()" class="text-2xl">&times;</button>
-        </div>
-        <div id="cart-items" class="flex-1 overflow-y-auto space-y-6"></div>
-        <div class="border-t pt-6">
-            <div class="flex justify-between text-xl mb-6 luxury-font italic"><span>Total:</span><span id="cart-total">Rs. 0</span></div>
-            <button onclick="checkoutWhatsApp()" class="w-full bg-black text-white py-4 uppercase tracking-widest text-[10px] font-bold hover:bg-stone-800 transition">Checkout via WhatsApp</button>
-        </div>
+        <main id="collection" class="max-w-7xl mx-auto px-6 py-32 pointer-auto">
+            <h2 class="luxury-font text-4xl mb-20 text-center italic">The Collection</h2>
+            <div id="product-grid" class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                </div>
+        </main>
     </div>
 
     <script>
-        // 3D Mouse Movement Logic
-        const trigger = document.getElementById('hero-trigger');
-        const card = document.getElementById('hero-card');
-        const shapes = document.querySelectorAll('.shape');
+        // --- ASLI 3D CODE (THREE.JS) ---
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('#bg-canvas'), antialias: true });
 
-        trigger.addEventListener('mousemove', (e) => {
-            const x = (window.innerWidth / 2 - e.pageX) / 25;
-            const y = (window.innerHeight / 2 - e.pageY) / 25;
-            
-            card.style.transform = `rotateY(${x}deg) rotateX(${y}deg) translateZ(50px)`;
-            
-            shapes.forEach((shape, i) => {
-                const speed = (i + 1) * 10;
-                shape.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
-            });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.position.setZ(30);
+
+        // 3D Geometry (Floating Stars/Particles)
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 5000;
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 100;
+        }
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+        const material = new THREE.PointsMaterial({ size: 0.005, color: '#ffffff' });
+        const particlesMesh = new THREE.Points(particlesGeometry, material);
+        scene.add(particlesMesh);
+
+        // Mouse Movement for 3D Interaction
+        let mouseX = 0; let mouseY = 0;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
         });
 
-        // (Previous Fetch & Cart Logic Here)
-        let cart = [];
-        let productsData = [];
-        let whatsappNum = "";
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.y += 0.001;
+            if (mouseX > 0) {
+                particlesMesh.rotation.x = -mouseY * 0.0001;
+                particlesMesh.rotation.y = -mouseX * 0.0001;
+            }
+            renderer.render(scene, camera);
+        }
+        animate();
 
+        // Responsive Window
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // --- DATA INJECTION ---
         fetch('./data.json').then(res => res.json()).then(data => {
-            whatsappNum = data.whatsapp_number || "923000000000";
-            productsData = data.products;
             const grid = document.getElementById('product-grid');
-            data.products.forEach((p, index) => {
+            data.products.forEach(p => {
                 grid.innerHTML += `
-                    <div class="group cursor-pointer" onclick="openProductDetail(${index})">
-                        <div class="relative aspect-[4/5] overflow-hidden bg-stone-50 mb-4 border border-stone-100">
-                            <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-110 transition duration-1000">
+                    <div class="product-card p-6 rounded-lg group">
+                        <div class="aspect-[3/4] overflow-hidden mb-6">
+                            <img src="${p.image}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
                         </div>
-                        <h3 class="luxury-font text-sm tracking-widest mb-1 uppercase">${p.product_title || 'Luxury Bag'}</h3>
-                        <p class="text-stone-400 text-[10px] font-bold">Rs. ${p.price}</p>
+                        <h3 class="luxury-font text-lg mb-2">${p.product_title}</h3>
+                        <p class="text-stone-500 text-sm mb-4">Rs. ${p.price}</p>
+                        <button class="w-full py-3 border border-stone-800 text-[9px] uppercase tracking-widest hover:border-white transition">Add to Selection</button>
                     </div>`;
             });
         });
-
-        function toggleCart() { 
-            document.body.classList.toggle('cart-open');
-            document.getElementById('cart-overlay').classList.toggle('hidden');
-        }
-        function updateCart() {
-            const list = document.getElementById('cart-items');
-            list.innerHTML = cart.length ? '' : '<p class="text-stone-400">Selection is empty</p>';
-            let sum = 0;
-            cart.forEach((item, i) => {
-                sum += Number(item.price.toString().replace(/,/g, ''));
-                list.innerHTML += `<div class="flex gap-4 items-center"><img src="${item.img}" class="w-12 h-16 object-cover text-xs"><div class="flex-1"><h4>${item.name}</h4><p>Rs. ${item.price}</p></div></div>`;
-            });
-            document.getElementById('cart-count').innerText = cart.length;
-            document.getElementById('cart-total').innerText = `Rs. ${sum.toLocaleString()}`;
-        }
-        function checkoutWhatsApp() {
-            let msg = "*ORDER:*%0A";
-            cart.forEach(item => msg += `- ${item.name} (Rs. ${item.price})%0A`);
-            window.location.href = `https://wa.me/${whatsappNum}?text=${msg}`;
-        }
     </script>
 </body>
 </html>
